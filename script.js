@@ -6,7 +6,14 @@ let aloe = {
   waterSchedule: "every 2-3 weeks",
 };
 
-let plantsArray = [aloe];
+let rawPlantData = localStorage.getItem("plantsArray");
+let parsedPlantData = JSON.parse(rawPlantData);
+
+let plantsArray = parsedPlantData || [];
+plantsArray.push(aloe);
+
+let plantsToStore = JSON.stringify(plantsArray);
+localStorage.setItem("plantsArray", plantsToStore);
 
 function displayPlants() {
   plantsArray.forEach((plant) => {
@@ -38,11 +45,14 @@ function addPlantFromForm(e) {
 
 plantForm.addEventListener("submit", addPlantFromForm);
 
-//DOESNT WORK
+//REFRESH AFTER CLICKING REMOVE TO LOAD NEW ARRAY
 let remove = document.getElementById("remove");
 
-function removePlant() {
-  plantsArray.pop;
+function removePlant(e) {
+  e.preventDefault();
+  plantsArray.pop();
+  let plantsToStore = JSON.stringify(plantsArray);
+  localStorage.setItem("plantsArray", plantsToStore);
 }
 
 remove.addEventListener("click", removePlant);
